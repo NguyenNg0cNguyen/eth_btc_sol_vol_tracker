@@ -98,6 +98,13 @@ async def main():
     
     print(f"🤖 Bot đang khởi động - Theo dõi {SYMBOLS}")
     
+    # Tạo task chạy WebSocket
+    ws_task = asyncio.create_task(run_websocket(uri))
+    
+    # Giữ service sống bằng cách mở port cho Render (bắt buộc)
+    await keep_alive()
+
+async def run_websocket(uri):
     reconnect = 0
     while reconnect < 50:
         try:
@@ -110,6 +117,26 @@ async def main():
             reconnect += 1
             print(f"⚠️ Mất kết nối (lần {reconnect}), thử lại sau...")
             await asyncio.sleep(min(reconnect * 3, 30))
+
+async def keep_alive():
+    """Giữ service không sleep trên Render"""
+    from aiohttp import web
+    import asyncio
+    
+    async def health(request):
+        return web.Response(text="Bot is running")
+    
+    app = web.Application()
+    app.router.add_get('/', health)
+    
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', int(os.environ.get("PORT", 10000)))
+    await site.start()
+    print(f"🌐 Keep-alive server running on port {os.environ.get('PORT', 10000)}")
+    
+    # Giữ loop chạy mãi
+    await asyncio.Event().wait()
 
 def graceful_shutdown(signum, frame):
     print("Nhận tín hiệu tắt từ Render...")
