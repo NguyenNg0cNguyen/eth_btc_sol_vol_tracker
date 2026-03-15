@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: eth-cvd-bot
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: TELEGRAM_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false
+    plan: free   # hoặc starter nếu muốn chạy ổn định hơn
