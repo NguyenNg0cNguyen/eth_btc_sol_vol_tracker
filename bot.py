@@ -16,7 +16,7 @@ SYMBOLS = ['btcusdt', 'ethusdt', 'solusdt']
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-VOLUME_SPIKE_THRESHOLD = 8000      # Tổng volume > 8000 USDT → cảnh báo mạnh
+VOLUME_SPIKE_THRESHOLD = 100000      # Tổng volume > 8000 USDT → cảnh báo mạnh
 DELTA_PERCENT_THRESHOLD = 30       # |Delta%| > 30% → cảnh báo mạnh
 
 # Dữ liệu theo dõi (bây giờ lưu theo USDT)
