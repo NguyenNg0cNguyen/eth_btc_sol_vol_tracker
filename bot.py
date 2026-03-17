@@ -16,8 +16,8 @@ SYMBOLS = ['btcusdt', 'ethusdt', 'solusdt']
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-VOLUME_SPIKE_THRESHOLD = 100000      # Tổng volume > 8000 USDT → cảnh báo mạnh
-DELTA_PERCENT_THRESHOLD = 30       # |Delta%| > 30% → cảnh báo mạnh
+VOLUME_SPIKE_THRESHOLD = 5000000      # Tổng volume > 8000 USDT → cảnh báo mạnh
+DELTA_PERCENT_THRESHOLD = 40       # |Delta%| > 30% → cảnh báo mạnh
 
 # Dữ liệu theo dõi (bây giờ lưu theo USDT)
 data = {sym: {'buy': 0.0, 'sell': 0.0, 'trades': 0, 'minute': None} for sym in SYMBOLS}
@@ -53,7 +53,7 @@ async def handle_message(message: str):
         ts = int(d['T'])
 
         # ==================== CHUYỂN VỀ GIỜ VIỆT NAM (+7) ====================
-        trade_time = datetime.fromtimestamp(ts / 1000, tz=timezone.utc)
+        trade_time = datetime.fromtimestamp(ts / 5000, tz=timezone.utc)
         vn_time = trade_time.astimezone(timezone(timedelta(hours=7)))
         trade_minute = vn_time.replace(second=0, microsecond=0)
 
